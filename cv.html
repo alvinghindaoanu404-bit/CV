@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>CV</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/print.css">
+</head>
+<body>
+  <!-- Printable one-page CV. Built from js/content.js; assets/cv.pdf is a print of this page. -->
+  <div class="toolbar">
+    <a href="index.html">← Back to site</a>
+    <button type="button" onclick="window.print()">Print / save as PDF</button>
+  </div>
+  <main class="sheet" id="cv"></main>
+  <script src="js/content.js"></script>
+  <script src="js/cv-print.js"></script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alvin Ghindăoanu — Industrial Engineering student</title>
+  <meta name="description" content="Interactive CV of Alvin Ghindăoanu, final-year Industrial Engineering student in Bucharest: projects in mechanical design, mechatronics and IoT, skills and contact details.">
+  <meta name="theme-color" content="#05070a">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Alvin Ghindăoanu — Industrial Engineering student">
+  <meta property="og:description" content="Interactive CV of Alvin Ghindăoanu, final-year Industrial Engineering student in Bucharest: projects in mechanical design, mechatronics and IoT, skills and contact details.">
+  <!-- Link preview: the card shown when this address is pasted into LinkedIn, WhatsApp or an email.
+       These addresses must be absolute; change them if the site moves to another address. -->
+  <meta property="og:url" content="https://alvinghindaoanu404-bit.github.io/CV/">
+  <meta property="og:image" content="https://alvinghindaoanu404-bit.github.io/CV/assets/share.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Alvin Ghindăoanu, Industrial Engineering student, Bucharest">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://alvinghindaoanu404-bit.github.io/CV/">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/space-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/styles.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- Ambient background: grid + two light sources that drift as scenes change -->
+  <div class="ambient" aria-hidden="true">
+    <div class="ambient__grid"></div>
+    <div class="glow glow--blue" id="glowBlue"></div>
+    <div class="glow glow--red" id="glowRed"></div>
+  </div>
+
+  <!-- Opening scene (about 1.5 s, any input skips it) -->
+  <div class="intro" id="intro" aria-hidden="true">
+    <div class="intro__panel intro__panel--top"></div>
+    <div class="intro__panel intro__panel--bottom"></div>
+    <div class="intro__center">
+      <span class="intro__mark" id="introMark"></span>
+      <span class="intro__line"></span>
+      <span class="intro__caption mono"><i class="intro__dot"></i>Curriculum Vitae</span>
+    </div>
+  </div>
+
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a class="nav__brand" href="#top" id="navBrand" aria-label="Back to top"></a>
+      <nav class="nav__links" id="navLinks" aria-label="Sections"></nav>
+      <a class="nav__cv" id="navCv" hidden>
+        <span>CV</span>
+      </a>
+      <button class="nav__toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Open menu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="menu" id="menu">
+    <nav class="menu__links" id="menuLinks" aria-label="Sections"></nav>
+  </div>
+
+  <div class="scene" id="scene" aria-hidden="true">
+    <span class="scene__num mono" id="sceneNum">00</span>
+    <span class="scene__bar"></span>
+    <span class="scene__name mono" id="sceneName">Intro</span>
+  </div>
+
+  <main id="main">
+    <!-- ============================== HERO ============================== -->
+    <section class="hero" id="top">
+      <div class="container hero__inner">
+        <div class="hero__copy">
+          <p class="hero__eyebrow mono" data-hero style="--i:0" id="heroEyebrow"></p>
+          <h1 class="hero__name" id="heroName"></h1>
+          <p class="hero__role mono" data-hero style="--i:3"><span id="heroRole"></span><i class="cursor" aria-hidden="true"></i></p>
+          <p class="hero__tagline" data-hero style="--i:4" id="heroTagline"></p>
+          <div class="hero__actions" data-hero style="--i:5" id="heroActions"></div>
+          <ul class="hero__links mono" data-hero style="--i:6" id="heroLinks"></ul>
+        </div>
+
+        <figure class="portrait" id="portrait">
+          <div class="portrait__frame">
+            <div class="portrait__media"><img id="heroPhoto" alt="" width="640" height="800" decoding="async"></div>
+            <span class="portrait__corner portrait__corner--tl"></span>
+            <span class="portrait__corner portrait__corner--tr"></span>
+            <span class="portrait__corner portrait__corner--bl"></span>
+            <span class="portrait__corner portrait__corner--br"></span>
+            <span class="portrait__tick"></span>
+          </div>
+          <figcaption class="portrait__caption mono" id="heroCaption"></figcaption>
+        </figure>
+      </div>
+
+      <a class="hero__scroll mono" href="#about" data-hero style="--i:8" id="heroScroll">
+        <span>Scroll</span><i></i>
+      </a>
+    </section>
+
+    <!-- ============================== ABOUT ============================== -->
+    <section class="section" id="about" data-nav="About">
+      <div class="container">
+        <header class="section__head" data-reveal="head">
+          <span class="section__num mono"></span>
+          <h2 class="section__title"><span class="line"><span class="line__inner">About</span></span></h2>
+          <span class="section__rule"></span>
+        </header>
+        <div class="about" id="aboutBody"></div>
+      </div>
+    </section>
+
+    <!-- ============================ EXPERIENCE ============================ -->
+    <section class="section" id="experience" data-nav="Experience">
+      <div class="container">
+        <header class="section__head" data-reveal="head">
+          <span class="section__num mono"></span>
+          <h2 class="section__title"><span class="line"><span class="line__inner">Experience</span></span></h2>
+          <span class="section__rule"></span>
+        </header>
+        <div class="tl" id="timeline"></div>
+      </div>
+    </section>
+
+    <!-- ============================= PROJECTS ============================= -->
+    <section class="section" id="projects" data-nav="Projects">
+      <div class="container">
+        <header class="section__head" data-reveal="head">
+          <span class="section__num mono"></span>
+          <h2 class="section__title"><span class="line"><span class="line__inner">Selected projects</span></span></h2>
+          <span class="section__rule"></span>
+        </header>
+        <div class="projects" id="projectGrid"></div>
+      </div>
+    </section>
+
+    <!-- Moving band between scenes -->
+    <div class="band" id="band" aria-hidden="true"><div class="band__track" id="bandTrack"></div></div>
+
+    <!-- ============================== SKILLS ============================== -->
+    <section class="section" id="skills" data-nav="Skills">
+      <div class="container">
+        <header class="section__head" data-reveal="head">
+          <span class="section__num mono"></span>
+          <h2 class="section__title"><span class="line"><span class="line__inner">Skills &amp; tools</span></span></h2>
+          <span class="section__rule"></span>
+        </header>
+        <div class="skills" id="skillGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============================= EDUCATION ============================= -->
+    <section class="section" id="education" data-nav="Education">
+      <div class="container">
+        <header class="section__head" data-reveal="head">
+          <span class="section__num mono"></span>
+          <h2 class="section__title"><span class="line"><span class="line__inner">Education &amp; credentials</span></span></h2>
+          <span class="section__rule"></span>
+        </header>
+        <div class="creds" id="credGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============================== CONTACT ============================== -->
+    <section class="section section--contact" id="contact" data-nav="Contact">
+      <div class="container">
+        <header class="section__head" data-reveal="head">
+          <span class="section__num mono"></span>
+          <h2 class="section__title"><span class="line"><span class="line__inner">Contact</span></span></h2>
+          <span class="section__rule"></span>
+        </header>
+        <div class="contact" id="contactBody"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner mono">
+      <span id="footerCopy"></span>
+      <a href="#top">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <noscript>
+    <div class="noscript">
+      This page needs JavaScript for its animations and content.
+      <a href="assets/cv.pdf">Download the CV as a PDF instead.</a>
+    </div>
+  </noscript>
+
+  <script src="js/content.js"></script>
+  <script src="js/stl-viewer.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
