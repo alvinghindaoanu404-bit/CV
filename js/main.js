@@ -230,7 +230,7 @@
     return el('li', { class: label ? 'has-label' : null }, label, b.text || '');
   }
 
-  // Used for work experience and for achievements: same shape, same look.
+  // Work experience timeline.
   function renderTimeline(id, items) {
     if (!has(items)) return false;
     var wrap = $('#' + id);
@@ -255,17 +255,6 @@
     return true;
   }
 
-  function renderAchievements() {
-    var data = CV.achievements || {};
-    if (!renderTimeline('achievementsTimeline', data.items)) return false;
-    if (data.intro) {
-      var intro = $('#achievementsIntro');
-      intro.textContent = data.intro;
-      intro.hidden = false;
-    }
-    return true;
-  }
-
   /* ------------------------------------------------------------------ */
   /* Render: projects                                                    */
   /* ------------------------------------------------------------------ */
@@ -277,25 +266,53 @@
     projects.forEach(function (p, i) {
       var visual;
       var src = safeUrl(p.image);
+      var model = safeUrl(p.model);
       if (src) {
-        visual = el('div', { class: 'project__visual' }, el('img', { src: src, alt: '', loading: 'lazy' }));
+        visual = el('div', { class: 'project__visual' },
+          el('img', { src: src, alt: p.imageAlt || '', loading: 'lazy' }));
       } else {
-        visual = el('div', { class: 'project__visual project__visual--gen', 'aria-hidden': 'true' },
-          el('span', { class: 'project__tick mono' }, 'PRJ / ' + pad(i + 1)),
-          el('span', { class: 'project__idx' }, pad(i + 1)));
+        // Drawn placeholder: also what shows if a 3D model cannot load.
+        visual = el('div', { class: 'project__visual project__visual--gen' },
+          el('span', { class: 'project__tick mono', 'aria-hidden': 'true' }, 'PRJ / ' + pad(i + 1)),
+          el('span', { class: 'project__idx', 'aria-hidden': 'true' }, pad(i + 1)));
+        if (model && window.STLViewer) {
+          visual.classList.add('project__visual--model');
+          var canvas = el('canvas', { class: 'project__model', role: 'img',
+            'aria-label': '3D model of ' + p.title + '. Drag to rotate.' });
+          visual.appendChild(canvas);
+          if (p.modelLabel) visual.appendChild(el('span', { class: 'project__dims mono', 'aria-hidden': 'true' }, p.modelLabel));
+          visual.appendChild(el('span', { class: 'project__hint mono', 'aria-hidden': 'true' }, 'Drag to rotate'));
+          window.STLViewer.mount(canvas, model,
+            function () { visual.classList.add('has-model'); },
+            function () {
+              visual.classList.remove('project__visual--model');
+              if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
+            });
+        }
       }
+
       var links = (p.links || []).map(function (l) { return link(l.label, l.url); }).filter(Boolean);
+      var kicker = (p.featured ? 'Featured project' : 'Project ' + pad(i + 1)) + (p.year ? ' · ' + p.year : '');
+
+      var nums = has(p.highlights) ? el('ul', { class: 'project__nums' }, p.highlights.map(function (h) {
+        return el('li', null, el('strong', null, h.value), el('span', null, h.label));
+      })) : null;
+      // The featured card shows its key numbers as a strip under the picture.
+      var side = p.featured ? el('div', { class: 'project__side' }, visual, nums) : visual;
 
       grid.appendChild(el('article', {
         class: 'project' + (p.featured ? ' project--featured' : ''),
         'data-reveal': 'up',
-        style: '--d:' + (p.featured ? 0 : (i % 2) * 110) + 'ms'
+        style: '--d:' + (p.featured ? 0 : ((i + 1) % 2) * 110) + 'ms'
       },
-        visual,
+        side,
         el('div', { class: 'project__body' },
-          el('p', { class: 'project__kicker mono' }, p.featured ? 'Featured project' : 'Project ' + pad(i + 1)),
+          el('p', { class: 'project__kicker mono' }, kicker),
           el('h3', { class: 'project__title' }, p.title),
+          p.meta ? el('p', { class: 'project__meta' }, p.meta) : null,
           p.description ? el('p', { class: 'project__desc' }, p.description) : null,
+          p.role ? el('p', { class: 'project__role' }, el('span', { class: 'mono' }, 'My part'), p.role) : null,
+          p.featured ? null : nums,
           tagList(p.tags),
           links.length ? el('div', { class: 'project__links' }, links) : null)));
     });
@@ -360,6 +377,22 @@
       }))));
     }
 
+    if (has(CV.languages)) {
+      right.push(block('Languages', el('ul', { class: 'rows' }, CV.languages.map(function (l, i) {
+        return el('li', { class: 'row row--lang', 'data-reveal': 'up', style: '--d:' + i * 90 + 'ms' },
+          el('h4', { class: 'row__title' }, l.name),
+          el('span', { class: 'row__when' }, l.level || ''));
+      }))));
+    }
+
+    if (has(CV.beyond)) {
+      right.push(block('Beyond engineering', el('ul', { class: 'rows' }, CV.beyond.map(function (b, i) {
+        return el('li', { class: 'row row--plain', 'data-reveal': 'up', style: '--d:' + i * 90 + 'ms' },
+          el('h4', { class: 'row__title' }, b.title),
+          b.note || b.year ? el('p', { class: 'row__note' }, [b.year, b.note].filter(Boolean).join(' · ')) : null);
+      }))));
+    }
+
     if (has(CV.certifications)) {
       right.push(block('Certificates & courses', el('ul', { class: 'rows' }, CV.certifications.map(function (c, i) {
         var title = safeUrl(c.url)
@@ -370,24 +403,6 @@
           el('div', null,
             el('h4', { class: 'row__title' }, title),
             c.issuer ? el('p', { class: 'row__meta' }, c.issuer) : null));
-      }))));
-    }
-
-    if (has(CV.languages)) {
-      right.push(block('Languages', el('ul', { class: 'rows' }, CV.languages.map(function (l, i) {
-        return el('li', { class: 'row row--lang', 'data-reveal': 'up', style: '--d:' + i * 90 + 'ms' },
-          el('h4', { class: 'row__title' }, l.name),
-          el('span', { class: 'row__when' }, l.level || ''));
-      }))));
-    }
-
-    if (has(CV.volunteering)) {
-      left.push(block('Volunteering', el('ul', { class: 'rows' }, CV.volunteering.map(function (v, i) {
-        return el('li', { class: 'row', 'data-reveal': 'up', style: '--d:' + i * 90 + 'ms' },
-          el('span', { class: 'row__when' }, v.year || ''),
-          el('div', null,
-            el('h4', { class: 'row__title' }, v.title),
-            v.issuer ? el('p', { class: 'row__note' }, v.issuer) : null));
       }))));
     }
 
@@ -743,7 +758,6 @@
     experience: renderTimeline('timeline', CV.experience),
     projects: renderProjects(),
     education: renderCredentials(),
-    achievements: renderAchievements(),
     skills: renderSkills(),
     contact: renderContact()
   });

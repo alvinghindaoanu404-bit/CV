@@ -7,17 +7,17 @@
      A section with nothing in it disappears from the page and from the menu.
    - After changing anything, regenerate the PDF:  node scripts/build-pdf.js
 
-   Lines marked  // CONFIRM  were inferred from the old CV and need checking.
+   Lines marked  // CONFIRM  were inferred from the project reports and need checking.
    ========================================================================== */
 
 window.CV = {
   person: {
     name: "Alvin Ghindăoanu",
-    role: "Industrial Engineering & Business student",
+    role: "Industrial Engineering student",
     tagline:
-      "I study engineering at POLITEHNICA Bucharest and business at ASE, and I bring the discipline of 13 years of elite karate — World and European titles included — to everything I work on.",
+      "Final-year Industrial Engineering student at POLITEHNICA Bucharest, back from an Erasmus year at UPM Madrid. I design in CATIA, SolidWorks and AutoCAD, and I am looking for an internship or an entry-level engineering role.",
     location: "Bucharest, Romania",
-    availability: "",                         // e.g. "Open to internships" — "" hides the badge
+    availability: "Open to internships & entry-level roles",   // "" hides the badge
     photo: "assets/profile.jpg",
     photoAlt: "Portrait of Alvin Ghindăoanu in a white shirt and black tie",
     email: "alvinmarc17@yahoo.com",
@@ -32,22 +32,22 @@ window.CV = {
   about: {
     // Big statement that lights up word by word as the visitor scrolls.
     lead:
-      "I study engineering and business side by side, and I learned to perform under pressure on the tatami: 13 years of Shotokan karate, three world titles and a European one.",
+      "I like turning requirements into real parts and working systems: mechanical design in CATIA and SolidWorks, and connected prototypes built on Raspberry Pi.",
     paragraphs: [
-      "Travelling to national and international championships from an early age made me independent early. I learned to organise my own time, to answer for my own results and to stay composed when it counts.",
-      "Balancing elite sport with strong academic results left little room for wasted effort, so I work efficiently and adapt quickly when plans change. I settle into new teams easily, and I want to put the same discipline to work on real engineering and business problems."
+      "I am in my final year of Industrial Engineering at POLITEHNICA Bucharest and study Business Administration at ASE in parallel. I spent the 2025–26 academic year on Erasmus at Universidad Politécnica de Madrid, working in international teams on a pipeline-inspection drone, a solar-powered wildfire-detection station and two smaller connected products.",
+      "Outside engineering I have competed in Shotokan karate for more than 13 years, up to World and European titles. It is where I learned to put in the work, stay disciplined and keep going when it gets hard."
     ],
     facts: [
       { label: "Based in", value: "Bucharest, Romania" },
-      { label: "Studying", value: "Industrial Engineering · Business Administration" },
+      { label: "Looking for", value: "Engineering internship or entry-level role" },
+      { label: "Graduating", value: "2027" },
       { label: "Languages", value: "Romanian, English (C1–C2), German (A2)" },
       { label: "Licences", value: "Driving B · Motorcycle A2" }
     ],
     stats: [
-      { value: 13, suffix: "", label: "Years of competitive karate" },
-      { value: 3, suffix: "", label: "World championship titles" },
-      { value: 8, suffix: "", label: "World & European medals" },
-      { value: 2, suffix: "", label: "Degrees studied in parallel" }   // CONFIRM
+      { value: 4, suffix: "", label: "Team engineering projects at UPM Madrid" },
+      { value: 2, suffix: "", label: "Degrees studied in parallel" },
+      { value: 13, suffix: "+", label: "Years of competitive karate" }
     ]
   },
 
@@ -62,39 +62,133 @@ window.CV = {
       end: "Sep 2026",
       current: false,
       summary: "One line on what the role was.",
-      bullets: [{ text: "What you did, with a number if you have one." }],
+      bullets: ["What you did, with a number if you have one."],
       tech: ["Excel", "AutoCAD"]
     } */
   ],
 
-  // University, personal or team projects. Empty for now, so the section is hidden.
+  /* Projects. Optional fields:
+     meta       small line above the title (where, course, team size)
+     role       what YOU did — the line recruiters look for
+     highlights up to three numbers with a short label
+     image      a picture, or
+     model      a binary .stl file shown as a live 3D model
+     short      one-sentence version used in the printable CV
+     pdf        false keeps the project out of the printable CV                   */
   projects: [
-    /* {
-      title: "Project name",
-      description: "What it is, your part in it, and the result.",
-      tags: ["SolidWorks", "Team of 4"],
-      links: [{ label: "Report", url: "https://..." }],
-      image: "assets/projects/name.jpg",
+    {
+      title: "PipeBot — pipeline inspection drone",
+      meta: "UPM Madrid · Mechatronics Systems Design · Team of 4",
+      year: "2025–26",                        // CONFIRM
+      description:
+        "Design of a compact ducted-fan quadcopter for inspecting pipes, ducts and tanks where sending a person in is unsafe. The frame doubles as a collision cage, and the electronics bay seats a flight controller, LiDAR, optical-flow and time-of-flight sensors.",
+      short:
+        "Design of a compact ducted-fan quadcopter for inspecting pipes and tanks; the frame doubles as a collision cage around the sensors and flight electronics.",
+      role: "Co-designed the mechanical structure in CATIA and wrote the discussion, conclusions and cost analysis.",
+      highlights: [
+        { value: "936 g", label: "take-off weight" },
+        { value: "525 mm", label: "motor-to-motor span" },
+        { value: "≈ €1,000", label: "parts cost" }
+      ],
+      tags: ["CATIA", "Mechanical design", "Design for 3D printing", "Mechatronics"],
+      links: [],
+      image: "assets/projects/pipebot.jpg",
+      imageAlt: "CATIA model of the PipeBot frame: a central body with four ring-shaped propeller ducts",
       featured: true
-    } */
+    },
+    {
+      title: "Relief emblem — CAD model",
+      meta: "Individual CAD work",            // CONFIRM: course, software, how it was made
+      year: "",
+      description:
+        "A gear-outline emblem with stepped relief, 152 × 90 × 3 mm. This is the actual model file — drag it to turn it around.",
+      role: "",
+      highlights: [],
+      tags: ["3D CAD", "STL"],
+      links: [],
+      model: "assets/models/emblem.stl",
+      modelLabel: "152 × 90 × 3 mm",
+      pdf: false                              // a turning model has no place on paper
+    },
+    {
+      title: "Smart solar microgrid with wildfire early warning",
+      meta: "UPM Madrid · IoT and Raspberry Pi · Team of 2",
+      year: "2025–26",
+      description:
+        "Design of an off-grid forest station that detects early signs of fire and raises the alarm over LoRa radio when there is no internet. We sized the solar, battery and supercapacitor system, checked it with a 24-hour simulation and trained a fire-risk classifier on synthetic sensor data.",
+      short:
+        "Off-grid forest station that detects early signs of fire and raises the alarm over LoRa radio. Sized the solar, battery and supercapacitor system and checked it with a 24-hour simulation.",
+      role: "",                               // CONFIRM: your part of the work
+      highlights: [
+        { value: "20 km", label: "LoRa link budget" },
+        { value: "40+ days", label: "autonomy without sun" }
+      ],
+      tags: ["Raspberry Pi", "Python", "LoRa", "Energy system sizing"],
+      links: [],
+      image: "assets/projects/microgrid.jpg",
+      imageAlt: "Simulation plot of temperature and humidity over 24 hours with the fire alarm trigger marked"
+    },
+    {
+      title: "PV-powered key tracker",
+      meta: "UPM Madrid · Photovoltaic Powered Products · Team of 5",
+      year: "2026",
+      description:
+        "Concept and energy budget for a key finder that never needs charging: a 40 mm disc with an indoor-light solar cell, Bluetooth for short range and assisted GPS for recovery. Sized so indoor light covers standby use and the battery rides out a 72-hour worst case with a 15× margin.",
+      short:
+        "Concept and energy budget for a key finder that never needs charging: indoor-light solar cell, Bluetooth and assisted GPS in a 40 mm disc.",
+      role: "",                               // CONFIRM: your part of the work
+      highlights: [],
+      tags: ["Product design", "Energy budget", "Photovoltaics"],
+      links: []
+    },
+    {
+      title: "Smart medicine box",
+      meta: "UPM Madrid · Practical IoT with Raspberry Pi · Team of 3",
+      year: "2025",
+      description:
+        "A working prototype that reminds a patient to take medication and confirms it was taken: a web page sets the alarm, a door sensor silences it when the box is opened, and an emergency button alerts a caregiver over MQTT.",
+      short:
+        "Working prototype that reminds a patient to take medication, confirms the box was opened and alerts a caregiver over MQTT.",
+      role: "",                               // CONFIRM: your part of the work
+      highlights: [],
+      tags: ["Raspberry Pi", "Python", "Flask", "MQTT"],
+      links: []
+    }
+  ],
+
+  // Words that scroll across the band between scenes. Empty list = use the skills.
+  band: ["Industrial Engineering", "CATIA", "SolidWorks", "AutoCAD", "EdgeCAM", "Mechatronics", "Raspberry Pi", "Python"],
+
+  skills: [
+    { group: "CAD & CAM", items: ["SolidWorks", "CATIA", "AutoCAD", "EdgeCAM"] },
+    { group: "Software & prototyping", items: ["Python (basic)", "Raspberry Pi", "Excel", "PowerPoint", "Word"] },
+    { group: "Strengths", items: ["Discipline", "Determination", "Composure under pressure", "Working in international teams", "Adaptability"] }
   ],
 
   education: [
     {
-      degree: "Industrial Engineering",
+      degree: "Bachelor's degree — Industrial Engineering",
       school: "POLITEHNICA Bucharest — Faculty of Industrial Engineering and Robotics",
       location: "",
-      start: "2023",                          // CONFIRM
-      end: "Present",                         // CONFIRM
-      details: ""
+      start: "2023",
+      end: "2027",
+      details: "Final year."
     },
     {
-      degree: "Business Administration (taught in foreign languages)",
+      degree: "Erasmus+ exchange year",
+      school: "Universidad Politécnica de Madrid (UPM) — ETSIDI",
+      location: "",
+      start: "2025",                          // CONFIRM: one semester or the full year
+      end: "2026",
+      details: "Project-based courses in mechatronics systems design, IoT with Raspberry Pi and photovoltaic-powered products."
+    },
+    {
+      degree: "Bachelor's degree — Business Administration (taught in foreign languages)",
       school: "Bucharest University of Economic Studies (ASE) — FABIZ",
       location: "",
-      start: "2023",                          // CONFIRM
-      end: "Present",                         // CONFIRM
-      details: ""
+      start: "2023",
+      end: "2027",
+      details: "Studied in parallel with engineering; paused for one year during the exchange."
     },
     {
       degree: "Baccalaureate — Mathematics & Computer Science, intensive English",
@@ -102,86 +196,26 @@ window.CV = {
       location: "",
       start: "",
       end: "2023",
-      details: "Honourable mentions for academic results in grades 10 and 11."
+      details: ""
     }
   ],
 
-  // Shown as a timeline under "Achievements".
-  achievements: {
-    intro:
-      "Thirteen years of Shotokan karate, competing in the WUKF, WADO and SKDUN federations at national, European and world level.",
-    items: [
-      {
-        role: "SKDUN World Karate Championship",
-        company: "Chalkida, Greece",
-        start: "2023",
-        location: "29 Sep – 1 Oct",
-        bullets: [
-          { label: "Gold", text: "Individual kumite (ippon shobu), youth 18–20, +78 kg" },
-          { label: "Gold", text: "Individual kumite (ippon shobu), youth 18–20, open" },
-          { label: "Silver", text: "Individual kumite (sanbon shobu), youth 18–20, +78 kg" }
-        ],
-        tech: ["World champion", "3 medals"]
-      },
-      {
-        role: "SKDUN European Shotokan Karate Championship",
-        company: "Lignano Sabbiadoro, Italy",
-        start: "2023",
-        location: "31 Mar – 2 Apr",
-        bullets: [
-          { label: "Gold", text: "Team kumite, juniors 16–20, mixed, open" },
-          { label: "Silver", text: "Individual kumite (ippon shobu), youth 18–20, +78 kg" },
-          { label: "Silver", text: "Individual kumite (sanbon shobu), youth 18–20, +78 kg" }
-        ],
-        tech: ["European champion", "3 medals"]
-      },
-      {
-        role: "SKDUN National Championship & Romanian Cup",
-        company: "Voluntari, Romania",
-        start: "2023",
-        location: "4 – 5 Mar",
-        bullets: [
-          { label: "Gold", text: "Individual kumite (ippon shobu), youth 18–20, +78 kg" },
-          { label: "Gold", text: "Individual kata, seniors 18+, 3–1 kyu" },
-          { label: "Gold", text: "Romanian Karate Cup — individual kumite (ippon shobu), youth 18–20, +78 kg" }
-        ],
-        tech: ["National champion"]
-      },
-      {
-        role: "SKDUN World Shotokan Karate Championship & World Cup",
-        company: "Karlovy Vary, Czech Republic",
-        start: "2022",
-        location: "30 Sep – 2 Oct",
-        bullets: [
-          { label: "Gold", text: "Team kumite, juniors 16–20, male, open" },
-          { label: "Silver", text: "Individual kumite (ippon shobu), juniors 16–17, +73 kg" }
-        ],
-        tech: ["World champion", "2 medals"]
-      }
-    ]
-  },
-
-  // Words that scroll across the band between scenes. Empty list = use the skills.
-  band: ["Industrial Engineering", "Business Administration", "World Champion", "Shotokan Karate", "Discipline", "Bucharest"],
-
-  skills: [
-    { group: "Strengths", items: ["Discipline", "Composure under pressure", "Adaptability", "Organisation", "Responsibility", "Teamwork"] },
-    { group: "Digital", items: ["Microsoft Excel", "PowerPoint", "Word", "Managing data & digital content", "Online collaboration tools"] }
-    // Add engineering and business tools here, e.g.
-    // { group: "Engineering", items: ["AutoCAD", "SolidWorks", "MATLAB"] }
+  // Kept short on purpose: one line of proof, not a list of results.
+  beyond: [
+    {
+      title: "Shotokan karate — World and European champion",
+      note: "More than 13 years of competition and still active. Certified national-level kumite referee.",
+      year: ""
+    },
+    {
+      title: "Volunteer — Chances for the Future (Șanse pentru viitor)",
+      note: "Collected school and educational materials for disadvantaged children.",
+      year: "2022"
+    }
   ],
 
   certifications: [
-    { title: "Fashion and the Circular Economy — Circular Learning Space for Digital Skills", issuer: "EIT RawMaterials", year: "2022", url: "" },
-    { title: "National-level kumite referee — examination certificate", issuer: "", year: "", url: "" }
-  ],
-
-  volunteering: [
-    {
-      title: "Chances for the Future (Șanse pentru viitor)",
-      issuer: "Socio-educational programme for children and young people — collected school and educational materials for disadvantaged families.",
-      year: "2022"
-    }
+    { title: "Circular Learning Space for Digital Skills", issuer: "EIT RawMaterials", year: "2022", url: "" }
   ],
 
   languages: [
@@ -190,10 +224,10 @@ window.CV = {
     { name: "German", level: "A2" }
   ],
 
-  interests: ["Snowboarding", "Wakeboarding", "Basketball", "Karate"],
+  interests: ["Snowboarding", "Wakeboarding", "Basketball"],
 
   contact: {
     headline: "Let's talk.",
-    note: "Email is the fastest way to reach me."
+    note: "Open to engineering internships and entry-level roles. Email is the fastest way to reach me."
   }
 };

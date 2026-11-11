@@ -65,7 +65,7 @@
 
   /* Profile */
   var about = CV.about || {};
-  var profile = [about.lead].concat((about.paragraphs || []).slice(0, 1)).filter(Boolean).join(' ');
+  var profile = person.tagline || about.lead || '';
   if (profile) sheet.appendChild(section('Profile', el('p', { class: 'profile' }, profile)));
 
   function bulletText(b) {
@@ -92,8 +92,10 @@
         el('div', { class: 'item__top' },
           el('h3', { class: 'item__title' }, e.degree),
           el('span', { class: 'item__when' }, period(e))),
-        el('p', { class: 'item__sub' }, [e.school, e.location].filter(Boolean).join(' · ')),
-        e.details ? el('p', { class: 'item__text' }, e.details) : null);
+        // A very short note rides on the school line; a longer one gets its own.
+        el('p', { class: 'item__sub' }, [e.school, e.location, e.details && e.details.length <= 24 ? e.details.replace(/\.$/, '') : '']
+          .filter(Boolean).join(' · ')),
+        e.details && e.details.length > 24 ? el('p', { class: 'item__text' }, e.details) : null);
     })));
   }
 
@@ -101,20 +103,20 @@
   timeline('Experience', CV.experience);
 
   /* Projects */
-  if (has(CV.projects)) {
-    sheet.appendChild(section('Projects', CV.projects.map(function (p) {
-      var first = (p.links || []).map(function (l) { return safeUrl(l.url); }).filter(Boolean)[0];
+  var projects = (CV.projects || []).filter(function (p) { return p.pdf !== false; });
+  if (projects.length) {
+    sheet.appendChild(section('Projects', projects.map(function (p) {
+      var nums = (p.highlights || []).map(function (h) { return h.value + ' ' + h.label; }).join(' · ');
       return el('div', { class: 'item' },
         el('div', { class: 'item__top' },
-          el('h3', { class: 'item__title' }, p.title, has(p.tags) ? el('span', null, ' · ' + p.tags.join(', ')) : null),
-          first && bare(first).indexOf('/') > -1 ? el('a', { class: 'item__when', href: first }, bare(first)) : null),
-        p.description ? el('p', { class: 'item__text' }, p.description) : null);
+          el('h3', { class: 'item__title' }, p.title),
+          el('span', { class: 'item__when' }, p.year || '')),
+        p.meta ? el('p', { class: 'item__sub' }, p.meta + (has(p.tags) ? ' · ' + p.tags.join(', ') : '')) : null,
+        p.short || p.description ? el('p', { class: 'item__text' }, p.short || p.description) : null,
+        p.role ? el('p', { class: 'item__text' }, el('strong', null, 'My part: '), p.role) : null,
+        nums ? el('p', { class: 'item__tech' }, nums) : null);
     })));
   }
-
-  /* Achievements */
-  var achievements = CV.achievements || {};
-  timeline('Achievements — competitive karate', achievements.items);
 
   /* Skills */
   var groups = (CV.skills || []).filter(function (g) { return g && has(g.items); });
@@ -127,30 +129,25 @@
     sheet.appendChild(section('Skills', dl));
   }
 
-  /* Smaller blocks, side by side */
-  var cols = el('div', { class: 'cols' });
-  function simpleList(title, list) {
-    if (!has(list)) return;
-    cols.appendChild(section(title, list.map(function (c) {
-      return el('div', { class: 'item' },
-        el('div', { class: 'item__top' },
-          el('h3', { class: 'item__title' }, c.title),
-          el('span', { class: 'item__when' }, c.year || '')),
-        c.issuer ? el('p', { class: 'item__sub' }, c.issuer) : null);
-    })));
+  /* Everything else, as one compact list */
+  var more = el('dl', { class: 'kv' });
+  function row(label, text) {
+    if (!text) return;
+    more.appendChild(el('dt', null, label));
+    more.appendChild(el('dd', null, text));
   }
-  simpleList('Certificates & courses', CV.certifications);
-  simpleList('Volunteering', CV.volunteering);
-  if (has(CV.languages)) {
-    cols.appendChild(section('Languages', el('p', null, CV.languages.map(function (l) {
-      return l.name + (l.level ? ' (' + l.level + ')' : '');
-    }).join(' · '))));
-  }
-  var extras = (about.facts || []).filter(function (f) { return /licen/i.test(f.label); });
-  if (has(CV.interests) || extras.length) {
-    cols.appendChild(section('Other', el('p', null,
-      extras.map(function (f) { return f.label + ': ' + f.value; })
-        .concat(has(CV.interests) ? ['Interests: ' + CV.interests.join(', ')] : []).join(' · '))));
-  }
-  if (cols.childNodes.length) sheet.appendChild(cols);
+  row('Languages', (CV.languages || []).map(function (l) {
+    return l.name + (l.level ? ' (' + l.level + ')' : '');
+  }).join(' · '));
+  row('Beyond engineering', (CV.beyond || []).map(function (b) {
+    return b.title + (b.year ? ', ' + b.year : '') + (b.note ? '. ' + b.note : '.');
+  }).join(' '));
+  row('Courses', (CV.certifications || []).map(function (c) {
+    return c.title + (c.issuer ? ', ' + c.issuer : '') + (c.year ? ' (' + c.year + ')' : '');
+  }).join(' · '));
+  var licences = (about.facts || []).filter(function (f) { return /licen/i.test(f.label); })
+    .map(function (f) { return f.value; }).join(' · ');
+  row('Licences', licences);
+  row('Interests', (CV.interests || []).join(', '));
+  if (more.childNodes.length) sheet.appendChild(section('Additional', more));
 })();
