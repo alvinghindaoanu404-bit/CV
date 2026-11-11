@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex">
+  <title>Link preview card</title>
+  <!-- The 1200 × 630 picture that appears when the site's address is pasted into LinkedIn,
+       WhatsApp or an email. Built from js/content.js; assets/share.jpg is a screenshot of this page
+       (node scripts/build-share.js). -->
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    html, body { width: 1200px; height: 630px; overflow: hidden; }
+    body { position: relative; background: var(--bg); }
+    .grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      -webkit-mask-image: radial-gradient(ellipse 80% 90% at 55% 45%, #000 20%, transparent 80%);
+      mask-image: radial-gradient(ellipse 80% 90% at 55% 45%, #000 20%, transparent 80%);
+    }
+    .light { position: absolute; width: 900px; height: 900px; border-radius: 50%; }
+    .light--blue { right: -220px; top: -330px; background: radial-gradient(closest-side, rgba(108, 203, 255, 0.24), transparent); }
+    .light--red { left: -420px; bottom: -520px; background: radial-gradient(closest-side, rgba(255, 61, 82, 0.16), transparent); }
+
+    .card {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 316px;
+      gap: 76px;
+      align-items: center;
+      padding: 0 92px 0 80px;
+    }
+    .eyebrow { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 17px; letter-spacing: 0.3em; }
+    .eyebrow i { width: 10px; height: 10px; border-radius: 50%; background: var(--red); }
+    .name {
+      margin-top: 26px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 98px;
+      line-height: 0.94;
+      letter-spacing: -0.045em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .name span { display: block; }
+    .name i { font-style: normal; color: var(--red); }
+    .role { margin-top: 30px; color: var(--blue); font-size: 23px; letter-spacing: 0.08em; }
+    .role::before { content: "// "; color: var(--dim); }
+    .line { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; margin-top: 28px; font-size: 22px; color: var(--soft); white-space: nowrap; }
+    .pill {
+      order: 2;
+      padding: 9px 16px;
+      border: 1px solid var(--blue-line);
+      border-radius: 999px;
+      background: var(--blue-wash);
+      color: var(--blue-soft);
+      font-size: 15px;
+      letter-spacing: 0.12em;
+    }
+
+    .photo { position: relative; aspect-ratio: 4 / 5; }
+    .photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; border-radius: 3px; }
+    .photo b { position: absolute; width: 26px; height: 26px; border: 2px solid var(--blue); }
+    .photo b:nth-of-type(1) { top: -13px; left: -13px; border-right: 0; border-bottom: 0; }
+    .photo b:nth-of-type(2) { top: -13px; right: -13px; border-left: 0; border-bottom: 0; }
+    .photo b:nth-of-type(3) { bottom: -13px; left: -13px; border-right: 0; border-top: 0; }
+    .photo b:nth-of-type(4) { bottom: -13px; right: -13px; border-left: 0; border-top: 0; }
+    .photo u { position: absolute; left: -13px; bottom: 20%; width: 4px; height: 54px; background: var(--red); }
+  </style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="light light--blue"></div>
+  <div class="light light--red"></div>
+  <div class="card">
+    <div>
+      <p class="eyebrow mono"><i></i>Curriculum Vitae</p>
+      <h1 class="name" id="name"></h1>
+      <p class="role mono" id="role"></p>
+      <p class="line"><span class="pill mono" id="pill" hidden></span><span id="where"></span></p>
+    </div>
+    <div class="photo" id="photo"><img id="img" alt=""><b></b><b></b><b></b><b></b><u></u></div>
+  </div>
+  <script src="js/content.js"></script>
+  <script>
+    (function () {
+      var person = (window.CV || {}).person || {};
+      var words = String(person.name || '').trim().split(/\s+/).filter(Boolean);
+      var lines = words.length > 2 ? [words.slice(0, -1).join(' '), words[words.length - 1]] : words;
+      var h1 = document.getElementById('name');
+      lines.forEach(function (text, i) {
+        var span = document.createElement('span');
+        span.textContent = text;
+        if (i === lines.length - 1) { var dot = document.createElement('i'); dot.textContent = '.'; span.appendChild(dot); }
+        h1.appendChild(span);
+      });
+      document.getElementById('role').textContent = person.role || '';
+      document.getElementById('where').textContent = person.location || '';
+      if (person.availability) {
+        var pill = document.getElementById('pill');
+        pill.textContent = person.availability;
+        pill.hidden = false;
+      }
+      if (person.photo) document.getElementById('img').src = person.photo;
+      else document.getElementById('photo').hidden = true;
+
+      // Shrink a long name until it fits its column.
+      function fit() {
+        h1.style.fontSize = '';
+        var widest = 0;
+        Array.prototype.forEach.call(h1.children, function (s) {
+          s.style.display = 'inline-block';
+          widest = Math.max(widest, s.offsetWidth);
+          s.style.display = '';
+        });
+        var room = h1.parentNode.clientWidth;
+        if (widest > room) h1.style.fontSize = Math.floor(parseFloat(getComputedStyle(h1).fontSize) * room / widest * 0.985) + 'px';
+      }
+      fit();
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    })();
+  </script>
+</body>
+</html>

@@ -14,6 +14,7 @@ Plain HTML, CSS and JavaScript. No build step and no dependencies.
 | `js/stl-viewer.js` | Small WebGL viewer that shows a binary `.stl` file as a live 3D model in a project card. |
 | `cv.html`, `css/print.css`, `js/cv-print.js` | The printable CV, built from the same `content.js`. |
 | `assets/cv.pdf` | The file behind the "Download CV" button. A print of `cv.html`. |
+| `share.html`, `assets/share.jpg` | The link preview card (1200 × 630) shown when the site's address is shared. |
 | `assets/profile.jpg` | Portrait photo (4:5, 960 × 1200). |
 | `assets/projects/` | Project pictures. |
 | `assets/models/` | 3D models (binary STL) shown by the viewer. |
@@ -34,7 +35,13 @@ Then refresh the PDF so it matches the site:
 node scripts/build-pdf.js
 ```
 
-This needs Playwright (`npm i -D playwright && npx playwright install chromium`).
+If the name, role or photo changed, refresh the link preview card as well:
+
+```
+node scripts/build-share.js
+```
+
+Both need Playwright (`npm i -D playwright && npx playwright install chromium`).
 Without it: open `cv.html` in a browser, choose Print, save as PDF, and store the file as `assets/cv.pdf`.
 
 ## Viewing it locally
@@ -49,6 +56,9 @@ python3 -m http.server 4173
 
 The site is static, so any static host works. With GitHub Pages: repository Settings → Pages →
 deploy from the branch that holds these files, folder `/ (root)`.
+
+The link preview tags at the top of `index.html` contain the site's full address. If the site moves
+(another repository name, a custom domain), update those three addresses.
 
 ## Fonts
 
