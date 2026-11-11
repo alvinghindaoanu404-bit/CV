@@ -106,15 +106,13 @@
   var projects = (CV.projects || []).filter(function (p) { return p.pdf !== false; });
   if (projects.length) {
     sheet.appendChild(section('Projects', projects.map(function (p) {
-      var nums = (p.highlights || []).map(function (h) { return h.value + ' ' + h.label; }).join(' · ');
+      // Two lines each: what it is and where, then one sentence plus the personal contribution.
       return el('div', { class: 'item' },
         el('div', { class: 'item__top' },
-          el('h3', { class: 'item__title' }, p.title),
+          el('h3', { class: 'item__title' }, p.title, p.meta ? el('span', null, ' · ' + p.meta) : null),
           el('span', { class: 'item__when' }, p.year || '')),
-        p.meta ? el('p', { class: 'item__sub' }, p.meta + (has(p.tags) ? ' · ' + p.tags.join(', ') : '')) : null,
-        p.short || p.description ? el('p', { class: 'item__text' }, p.short || p.description) : null,
-        p.role ? el('p', { class: 'item__text' }, el('strong', null, 'My part: '), p.role) : null,
-        nums ? el('p', { class: 'item__tech' }, nums) : null);
+        el('p', { class: 'item__text' }, p.short || p.description || '',
+          p.role ? [' ', el('strong', null, 'My part: '), p.role] : null));
     })));
   }
 
@@ -140,14 +138,14 @@
     return l.name + (l.level ? ' (' + l.level + ')' : '');
   }).join(' · '));
   row('Beyond engineering', (CV.beyond || []).map(function (b) {
-    return b.title + (b.year ? ', ' + b.year : '') + (b.note ? '. ' + b.note : '.');
+    var note = b.short !== undefined ? b.short : b.note;
+    return b.title + (b.year ? ', ' + b.year : '') + (note ? '. ' + note : '.');
   }).join(' '));
-  row('Courses', (CV.certifications || []).map(function (c) {
+  row('Courses', (CV.certifications || []).filter(function (c) { return c.pdf !== false; }).map(function (c) {
     return c.title + (c.issuer ? ', ' + c.issuer : '') + (c.year ? ' (' + c.year + ')' : '');
   }).join(' · '));
   var licences = (about.facts || []).filter(function (f) { return /licen/i.test(f.label); })
-    .map(function (f) { return f.value; }).join(' · ');
-  row('Licences', licences);
-  row('Interests', (CV.interests || []).join(', '));
+    .map(function (f) { return 'Licences: ' + f.value; });
+  row('Other', licences.concat(has(CV.interests) ? ['Interests: ' + CV.interests.join(', ')] : []).join(' · '));
   if (more.childNodes.length) sheet.appendChild(section('Additional', more));
 })();
