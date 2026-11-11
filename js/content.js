@@ -7,7 +7,6 @@
      A section with nothing in it disappears from the page and from the menu.
    - After changing anything, regenerate the PDF:  node scripts/build-pdf.js
 
-   Lines marked  // CONFIRM  were inferred from the project reports and need checking.
    ========================================================================== */
 
 window.CV = {
@@ -99,7 +98,7 @@ window.CV = {
     },
     {
       title: "Cover part — CNC milling program",
-      meta: "POLITEHNICA Bucharest · EdgeCAM lab · Individual",     // CONFIRM
+      meta: "POLITEHNICA Bucharest · EdgeCAM lab · Individual",
       year: "",
       description:
         "Machining program for a 65 × 60 × 27 mm cover on a vertical mill: eight operations, with end mills from 32 mm down to 4 mm and three chamfering passes. The part model was supplied; choosing the tools and building the machining sequence was the exercise. Drag the model to turn it around.",
@@ -117,7 +116,7 @@ window.CV = {
     },
     {
       title: "Roller chain — parts and assembly",
-      meta: "POLITEHNICA Bucharest · SolidWorks · Individual",      // CONFIRM
+      meta: "POLITEHNICA Bucharest · SolidWorks · Individual",
       year: "",
       description:
         "A roller chain built from scratch in SolidWorks: five parts modelled one by one — inner and outer link plates, bushing, ring and pin — then mated into a multi-link assembly.",
@@ -138,7 +137,7 @@ window.CV = {
         "Design of an off-grid forest station that detects early signs of fire and raises the alarm over LoRa radio when there is no internet. We sized the solar, battery and supercapacitor system, checked it with a 24-hour simulation and trained a fire-risk classifier on synthetic sensor data.",
       short:
         "Off-grid forest station that detects early signs of fire and raises the alarm over LoRa radio; solar, battery and supercapacitor system sized and checked with a 24-hour simulation.",
-      role: "Shared the work equally with one teammate.",
+      role: "Sized the solar, battery and supercapacitor system, built the 24-hour simulation and set up the LoRa radio link and its code.",
       highlights: [
         { value: "20 km", label: "LoRa link budget" },
         { value: "40+ days", label: "autonomy without sun" }
@@ -170,7 +169,7 @@ window.CV = {
         "Concept and energy budget for a key finder that never needs charging: a 40 mm disc with an indoor-light solar cell, Bluetooth for short range and assisted GPS for recovery. Sized so indoor light covers standby use and the battery rides out a 72-hour worst case with a 15× margin.",
       short:
         "Concept and energy budget for a key finder that never needs charging: indoor-light solar cell, Bluetooth and assisted GPS in a 40 mm disc.",
-      role: "Did most of the work in a team of five.",
+      role: "Did most of the work: concept and user analysis, energy consumption profile, solar cell and battery sizing, and the physical layout.",
       highlights: [],
       tags: ["Product design", "Energy budget", "Photovoltaics"],
       links: []
@@ -183,7 +182,7 @@ window.CV = {
         "A working prototype that reminds a patient to take medication and confirms it was taken: a web page sets the alarm, a door sensor silences it when the box is opened, and an emergency button alerts a caregiver over MQTT.",
       short:
         "Working Raspberry Pi prototype that reminds a patient to take medication, confirms the box was opened and alerts a caregiver over MQTT.",
-      role: "Did most of the work in a team of three.",
+      role: "Built most of the prototype: breadboard circuit, Python alarm logic, MQTT alerts and the web page.",
       highlights: [],
       tags: ["Raspberry Pi", "Python", "Flask", "MQTT"],
       links: []
@@ -195,8 +194,8 @@ window.CV = {
 
   skills: [
     { group: "CAD & CAM", items: ["SolidWorks", "CATIA", "AutoCAD", "Fusion 360", "EdgeCAM"] },
-    { group: "Software & prototyping", items: ["Python (basic)", "Raspberry Pi", "Excel", "PowerPoint", "Word"] },
-    { group: "Strengths", items: ["Discipline", "Determination", "Composure under pressure", "Working in international teams", "Adaptability"] }
+    { group: "Software & prototyping", items: ["Python (Raspberry Pi projects)", "Raspberry Pi", "Excel", "PowerPoint", "Word"] },
+    { group: "Strengths", items: ["Discipline", "Determination", "Composure under pressure", "Working in international teams"] }
   ],
 
   education: [
